@@ -52,15 +52,10 @@ class Translator(loader.Module):
             entities = []
 
         try:
+            tr_text = await self._client.translate(message.peer_id, message, lang, raw_text=text, entities=entities)
             await utils.answer(
                 message,
-                await self._client.translate(
-                    message.peer_id,
-                    message,
-                    lang,
-                    raw_text=text,
-                    entities=entities,
-                ),
+                self.strings["translated_text"].format(tr_text)
             )
         except Exception:
             logger.exception("Unable to translate text")

@@ -593,6 +593,7 @@ translate:
   no_args: "<emoji document_id=5210952531676504517>❌</emoji> <b>Keine Argumente angegeben</b>"
   error: "<emoji document_id=5210952531676504517>❌</emoji> <b>Text konnte nicht übersetzt werden</b>"
   language: "de"
+  translated_text: "<emoji document_id=5787344001862471785>🔁</emoji> Übersetzter Text:\n<blockquote>{tr_text} </blockquote>"
   _cls_doc: "Übersetzt Text (offensichtlich)"
   _cmd_doc_tr: "[Sprache] [Text] - Übersetzt den Text"
 
