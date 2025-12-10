@@ -296,8 +296,7 @@ class TelegramLogsHandler(logging.Handler):
         chunks = list(utils.smart_split(*herokutl.extensions.html.parse(chunks), 4096))
 
         await call.edit(
-            chunks[0],
-            reply_markup=self._gen_web_debug_button(item),
+            chunks[0]
         )
 
         for chunk in chunks[1:]:
