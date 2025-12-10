@@ -306,7 +306,7 @@ class HerokuInfoMod(loader.Module):
 
                 await utils.answer(
                     message,
-                    file = elf._get_info_photo(start),
+                    file = self._get_info_photo(start),
                     reply_to=getattr(message, "reply_to_msg_id", None),
                 )
             elif self.config["custom_message"] is None:
