@@ -1,4 +1,24 @@
 # Heroku Changelog
+## 🪐 Heroku 2.0.0
+- rework utils
+- added prefix to start message
+- fix create bot
+- removed debugger
+- improve error message
+- added protection in terminal
+- added media_quote, invert_media to help, ping and info cmds
+- removed "heroku" from bot username
+- fix asset channel
+- add entity validation for setprefix
+- update readme
+- added utils.get_platform_named_emoji
+- added multiload
+- fix error in help lib
+- add config to internet error ignore
+- added hsearch!!
+- updated heroku-tl to 2.0.0
+- 
+
 ## 🪐 Heroku 1.7.2
 - added autoupdate
 - updated heroku-tl to 1.7.2
