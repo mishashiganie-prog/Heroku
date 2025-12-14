@@ -17,6 +17,8 @@ import logging
 
 from herokutl.extensions.html import CUSTOM_EMOJIS
 from herokutl.tl.types import Message
+from herokutl.types import InputMediaWebPage
+
 
 from .. import loader, utils
 
@@ -55,6 +57,21 @@ class Help(loader.Module):
                 "command_emoji",
                 "<emoji document_id=5197195523794157505>▫️</emoji>",
                 lambda: "Emoji for command",
+            ),
+            loader.ConfigValue(
+                "banner_url",
+                None,
+                lambda: "Banner for .help",
+            ),
+            loader.ConfigValue(
+                "media_quote",
+                "False",
+                lambda: "quote a banner in help",
+            ),
+            loader.ConfigValue(
+                "invert_media",
+                "False",
+                lambda: "invert banner",
             ),
         )
 
@@ -232,7 +249,14 @@ class Help(loader.Module):
     @loader.command(ru_doc="[args] | Помощь с вашими модулями!", ua_doc="[args] | допоможіть з вашими модулями!", de_doc="[args] | Hilfe mit deinen Modulen!")
     async def help(self, message: Message):
         """[args] | help with your modules!"""
+
         args = utils.get_args_raw(message)
+
+        banner = self.config["banner_url"]
+
+        if self.config["banner_url"] and self.config["media_quote"] is True:
+            banner = InputMediaWebPage(self.config["banner_url"])
+
         force = False
         if "-f" in args:
             args = args.replace(" -f", "").replace("-f", "")
@@ -350,6 +374,8 @@ class Help(loader.Module):
                     if self.lookup("Loader").fully_loaded
                     else f"\n\n{self.strings('partial_load')}"
                 ),
+            file = banner,
+            invert_media = self.config["invert_media"]
             ),
         )
 
