@@ -38,6 +38,10 @@ class TokenObtainment(InlineUnit):
             logger.debug(">> %s", m.raw_text)
             logger.debug("<< %s", r.raw_text)
 
+            if "Sorry, you can't add more than" r.raw_text:
+                logger.info("To create a new bot, delete one of your bots")
+                return False
+                
             if "20" in r.raw_text:
                 return False
 
