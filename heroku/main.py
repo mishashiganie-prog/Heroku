@@ -900,12 +900,13 @@ class Heroku:
                 caption=(
                     "🪐 <b>Heroku {} started!</b>\n\n⚙ <b>GitHub commit SHA: <a"
                     ' href="https://github.com/coddrago/Heroku/commit/{}">{}</a></b>\n🔎'
-                    " <b>Update status: {}</b>\n<b>{}</b>".format(
+                    " <b>Update status: {}</b>\n<b>{}</b>\n🕶 <b>Prefix:</b> <code>{}</code>".format(
                         ".".join(list(map(str, list(__version__)))),
                         build,
                         build[:7],
                         upd,
                         web_url,
+                        self.get_prefix(),
                     )
                 ),
             )
