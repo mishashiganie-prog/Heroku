@@ -67,11 +67,13 @@ class Help(loader.Module):
                 "media_quote",
                 "False",
                 lambda: "quote a banner in help",
+                validator=loader.validators.Boolean(),
             ),
             loader.ConfigValue(
                 "invert_media",
                 "False",
                 lambda: "invert banner",
+                validator=loader.validators.Boolean(),
             ),
         )
 
@@ -374,9 +376,9 @@ class Help(loader.Module):
                     if self.lookup("Loader").fully_loaded
                     else f"\n\n{self.strings('partial_load')}"
                 ),
-            file = banner,
-            invert_media = self.config["invert_media"]
             ),
+            file = banner,
+            invert_media = self.config["invert_media"],
         )
 
     @loader.command(ru_doc="| Ссылка на чат помощи", ua_doc="| посилання для чату служби підтримки", de_doc="| Link zum Support-Chat")
