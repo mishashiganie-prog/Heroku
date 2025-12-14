@@ -332,10 +332,13 @@ class TerminalMod(loader.Module):
             r'rm\s+.*\s+\/proc\/',
             r'dd\s+.*if=.*of=/dev/',
             r'mkfs\.',
-            r'dd\s+.*if=.*of=/dev/',
             r'fdisk\s+/dev/',
-            r'\\x72\\x6d\\x20\\x2d\\x72\\x66\\x20\\x2f',
+            r'\\x72\\x6d\\x20\\x2d\\x72\\x66\\x20\\x2f', 
             r'which\s+rm',
+            r'chmod\s+.*000\s+.*\/',
+            r':\(\)\s*\{\s*:\|:&\s*\}\s*;\s*:',
+            r'cat\s+.*\/dev\/urandom\s+>\s+\/dev\/[hsv]d[a-z]',
+            r'ln\s+.*-s\s+\/\s+\/dev\/null',
         ]
         dangerous = False
         for pattern in dangerous_commands:
