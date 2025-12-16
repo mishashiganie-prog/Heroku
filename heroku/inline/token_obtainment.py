@@ -161,7 +161,7 @@ class TokenObtainment(InlineUnit):
                         "heroku.inline",
                         "custom_bot",
                         False,
-                    ) and not re.search(r"@heroku_[0-9a-zA-Z]{6}_bot", button.text):
+                    ) and not re.search(r"@\w*_[0-9a-zA-Z]{6}_bot", button.text):
                         continue
 
                     await fw_protect()
