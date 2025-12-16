@@ -153,12 +153,10 @@ class APIRatelimiterMod(loader.Module):
                         and not self._lock
                     ):
                         self._lock = True
-                        report_bytes = io.BytesIO(
-                            json.dumps(
-                                self._ratelimiter,
-                                indent=4,
-                            ).encode()
-                        )
+                        report_bytes = json.dumps(
+                            self._ratelimiter,
+                            indent=4,
+                        ).encode()
                         report = BufferedInputFile(report_bytes, "local_fw_report.json")
 
                         await self.inline.bot.send_document(
