@@ -15,6 +15,7 @@ import logging
 import re
 import os
 import random
+import typing
 
 from herokutl.errors.rpcerrorlist import YouBlockedUserError
 from herokutl.tl.functions.contacts import UnblockRequest
@@ -24,11 +25,14 @@ from .. import main
 from .._internal import fw_protect
 from .types import InlineUnit
 
+if typing.TYPE_CHECKING:
+    from ..inline.core import InlineManager
+
 logger = logging.getLogger(__name__)
 
 
 class TokenObtainment(InlineUnit):
-    async def _create_bot(self):
+    async def _create_bot(self: "InlineManager"):
         logger.info("User doesn't have bot, attempting creating new one")
         async with self._client.conversation("@BotFather", exclusive=False) as conv:
             await fw_protect()
@@ -107,7 +111,7 @@ class TokenObtainment(InlineUnit):
         return await self._assert_token(False)
 
     async def _assert_token(
-        self,
+        self: "InlineManager",
         create_new_if_needed: bool = True,
         revoke_token: bool = False,
     ) -> bool:
@@ -233,14 +237,14 @@ class TokenObtainment(InlineUnit):
 
         return await self._create_bot() if create_new_if_needed else False
 
-    async def _reassert_token(self):
+    async def _reassert_token(self: "InlineManager"):
         is_token_asserted = await self._assert_token(revoke_token=True)
         if not is_token_asserted:
             self.init_complete = False
         else:
             await self.register_manager(ignore_token_checks=True)
 
-    async def _dp_revoke_token(self, already_initialised: bool = True):
+    async def _dp_revoke_token(self: "InlineManager", already_initialised: bool = True):
         if already_initialised:
             await self._stop()
             logger.error("Got polling conflict. Attempting token revocation...")

@@ -43,6 +43,8 @@ from .utils import Utils
 
 logger = logging.getLogger(__name__)
 
+if typing.TYPE_CHECKING:
+    from ..loader import Modules
 
 class InlineManager(
     Utils,

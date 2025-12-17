@@ -45,12 +45,15 @@ from .. import utils
 from ..types import HerokuReplyMarkup
 from .types import InlineCall, InlineUnit
 
+if typing.TYPE_CHECKING:
+    from ..inline.core import InlineManager
+
 logger = logging.getLogger(__name__)
 
 
 class Utils(InlineUnit):
     def _generate_markup(
-        self,
+        self: "InlineManager",
         markup_obj: typing.Optional[typing.Union[HerokuReplyMarkup, str]],
     ) -> typing.Optional[InlineKeyboardMarkup]:
         """Generate markup for form or list of `dict`s"""
@@ -238,16 +241,16 @@ class Utils(InlineUnit):
 
     generate_markup = _generate_markup
 
-    async def _close_unit_handler(self, call: InlineCall):
+    async def _close_unit_handler(self: "InlineManager", call: InlineCall):
         return await self._client.delete_messages(call._units.get(call.unit_id).get('chat'), call._units.get(call.unit_id).get('message_id'))
 
-    async def _unload_unit_handler(self, call: InlineCall):
+    async def _unload_unit_handler(self: "InlineManager", call: InlineCall):
         await call.unload()
 
-    async def _answer_unit_handler(self, call: InlineCall, text: str, show_alert: bool):
+    async def _answer_unit_handler(self: "InlineManager", call: InlineCall, text: str, show_alert: bool):
         await call.answer(text, show_alert=show_alert)
 
-    def _reverse_method_lookup(self, needle: callable, /) -> typing.Optional[str]:
+    def _reverse_method_lookup(self: "InlineManager", needle: callable, /) -> typing.Optional[str]:
         return next(
             (
                 name
@@ -260,7 +263,7 @@ class Utils(InlineUnit):
             None,
         )
 
-    async def check_inline_security(self, *, func: typing.Callable, user: int) -> bool:
+    async def check_inline_security(self: "InlineManager", *, func: typing.Callable, user: int) -> bool:
         """Checks if user with id `user` is allowed to run function `func`"""
         return await self._client.dispatcher.security.check(
             message=None,
@@ -269,7 +272,7 @@ class Utils(InlineUnit):
             inline_cmd=self._reverse_method_lookup(func),
         )
 
-    def _find_caller_sec_map(self) -> typing.Optional[typing.Callable[[], int]]:
+    def _find_caller_sec_map(self: "InlineManager") -> typing.Optional[typing.Callable[[], int]]:
         try:
             caller = utils.find_caller()
             if not caller:
@@ -286,7 +289,7 @@ class Utils(InlineUnit):
         return None
 
     def _normalize_markup(
-        self, reply_markup: HerokuReplyMarkup
+        self: "InlineManager", reply_markup: HerokuReplyMarkup
     ) -> typing.List[typing.List[typing.Dict[str, typing.Any]]]:
         if isinstance(reply_markup, dict):
             return [[reply_markup]]
@@ -298,11 +301,11 @@ class Utils(InlineUnit):
 
         return reply_markup
 
-    def sanitise_text(self, text: str) -> str:
+    def sanitise_text(self: "InlineManager", text: str) -> str:
         return re.sub(r"</?emoji.*?>", "", text)
 
     async def _edit_unit(
-        self,
+        self: "InlineManager",
         text: typing.Optional[str] = None,
         reply_markup: typing.Optional[HerokuReplyMarkup] = None,
         *,
@@ -559,7 +562,7 @@ class Utils(InlineUnit):
             return True
 
     async def _delete_unit_message(
-        self,
+        self: "InlineManager",
         call: typing.Optional[CallbackQuery] = None,
         unit_id: typing.Optional[str] = None,
         chat_id: typing.Optional[int] = None,
@@ -595,7 +598,7 @@ class Utils(InlineUnit):
 
         return True
 
-    async def _unload_unit(self, unit_id: str) -> bool:
+    async def _unload_unit(self: "InlineManager", unit_id: str) -> bool:
         """Params `self`, `unit_id` are for internal use only, do not try to pass them"""
         try:
             if "on_unload" in self._units[unit_id] and callable(
@@ -613,7 +616,7 @@ class Utils(InlineUnit):
         return True
 
     def build_pagination(
-        self,
+        self: "InlineManager",
         callback: typing.Callable[[int], typing.Awaitable[typing.Any]],
         total_pages: int,
         unit_id: typing.Optional[str] = None,
@@ -730,7 +733,7 @@ class Utils(InlineUnit):
         ]
 
     def _validate_markup(
-        self,
+        self: "InlineManager",
         buttons: typing.Optional[HerokuReplyMarkup],
     ) -> typing.List[typing.List[typing.Dict[str, typing.Any]]]:
         if buttons is None:

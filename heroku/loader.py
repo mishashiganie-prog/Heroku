@@ -510,7 +510,7 @@ class Modules:
         self.inline_handlers = {}
         self.callback_handlers = {}
         self.aliases = {}
-        self.modules = []  # skipcq: PTC-W0052
+        self.modules: typing.List[typing.Optional["Module"]] = []  # skipcq: PTC-W0052
         self.libraries = []
         self.watchers = []
         self._log_handlers = []

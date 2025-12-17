@@ -47,6 +47,9 @@ from .types import (
     Module,
 )
 
+if typing.TYPE_CHECKING:
+    from .dispatcher import CommandDispatcher
+
 logger = logging.getLogger(__name__)
 
 
@@ -97,6 +100,7 @@ class CustomTelegramClient(TelegramClient):
                 typing.Any,
             ]
         ] = None
+        self.dispatcher: "CommandDispatcher"
 
     async def connect(self, unix_socket_path: typing.Optional[str] = None):
         if self.session is None:
