@@ -430,7 +430,6 @@ class UpdaterMod(loader.Module):
                         else "lavHost"
                     ),
                 )
-                await self.process_restart_message(msg_obj)
                 await self.client.send_message("lavhostbot", "/update")
                 return
 
