@@ -291,7 +291,7 @@ class TelegramLogsHandler(logging.Handler):
         bot: "aiogram.Bot",  # type: ignore  # noqa: F821
         item: HerokuException,
     ):
-        chunks = item.message + "\n\n<b>🪐 Full traceback:</b>\n" + item.full_stack
+        chunks = item.message + "\n\n<b>🪐 Full traceback:</b>\n" + f"<pre><code class=\"language-python\">{item.full_stack}</code></pre>"
 
         chunks = list(utils.smart_split(*herokutl.extensions.html.parse(chunks), 4096))
 
