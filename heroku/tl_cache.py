@@ -35,6 +35,7 @@ from herokutl.tl.types import (
     Updates,
     UpdatesCombined,
     UpdateShort,
+    User,
     UserFull,
 )
 from herokutl.utils import is_list_like
@@ -48,7 +49,10 @@ from .types import (
 )
 
 if typing.TYPE_CHECKING:
+    from .database import Database
     from .dispatcher import CommandDispatcher
+    from .loader import Modules
+    from .inline.core import InlineManager
 
 logger = logging.getLogger(__name__)
 
@@ -101,6 +105,13 @@ class CustomTelegramClient(TelegramClient):
             ]
         ] = None
         self.dispatcher: "CommandDispatcher"
+        self.tg_id: int
+        self._tg_id: int
+        self.heroku_me: "User"
+        self.hikka_me: "User"
+        self.heroku_db: "Database"
+        self.loader: "Modules"
+        self.heroku_inline: "InlineManager"
 
     async def connect(self, unix_socket_path: typing.Optional[str] = None):
         if self.session is None:
