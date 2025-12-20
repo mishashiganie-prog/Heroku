@@ -70,12 +70,12 @@ class UpdaterMod(loader.Module):
         self.set("autoupdate", True)
         if not state:
             self.config["autoupdate"] = False
-            await self.inline.bot(call.edit(self.strings("autoupdate_off").format(prefix=self.get_prefix())))
+            await self.inline.bot(call.answer(self.strings("autoupdate_off").format(prefix=self.get_prefix())))
             return
         
         self.config["autoupdate"] = True
 
-        await self.inline.bot(call.edit(self.strings("autoupdate_on")))
+        await self.inline.bot(call.answer(self.strings("autoupdate_on")))
 
     def get_changelog(self) -> str:
         try:
