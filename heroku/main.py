@@ -912,7 +912,7 @@ class Heroku:
                         build[:7],
                         upd,
                         web_url,
-                        pref if pref else ".",
+                        "." if pref is None else pref,
                     )
                 ),
             )
