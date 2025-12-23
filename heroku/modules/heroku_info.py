@@ -173,6 +173,7 @@ class HerokuInfoMod(loader.Module):
                 platform=platform,
                 platform_emoji=platform_emoji,
                 upd=upd,
+                python_ver=lib_platform.python_version()
                 uptime=utils.formatted_uptime(),
                 cpu_usage=utils.get_cpu_usage(),
                 ram_usage=f"{utils.get_ram_usage()} MB",
