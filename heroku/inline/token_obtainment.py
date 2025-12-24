@@ -296,7 +296,7 @@ class TokenObtainment(InlineUnit):
 
             return True
 
-        return await self._create_bot(session, url) if create_new_if_needed else False
+        return await self._create_bot(session, url, _hash) if create_new_if_needed else False
 
     async def _reassert_token(
         self: "InlineManager",
