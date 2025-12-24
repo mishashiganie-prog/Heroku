@@ -186,32 +186,24 @@ class HerokuInfoMod(loader.Module):
                 ping=round((time.perf_counter_ns() - start) / 10**6, 3)
             )
             if self.config["custom_message"]
-            else (
-                f'<b>{{}}</b>\n\n<b>{{}} {self.strings("owner")}:</b> {me}\n\n<b>{{}}'
-                f' {self.strings("version")}:</b> {_version} {build}\n<b>{{}}'
-                f' {self.strings("branch")}:'
-                f"</b> <code>{version.branch}</code>\n{upd}\n\n<b>{{}}"
-                f' {self.strings("prefix")}:</b> {prefix}\n<b>{{}}'
-                f' {self.strings("uptime")}:'
-                f"</b> {utils.formatted_uptime()}\n\n<b>{{}}"
-                f' {self.strings("cpu_usage")}:'
-                f"</b> <i>~{utils.get_cpu_usage()} %</i>\n<b>{{}}"
-                f' {self.strings("ram_usage")}:'
-                f"</b> <i>~{utils.get_ram_usage()} MB</i>\n<b>{{}}</b>"
-            ).format(
+            else self.strings["info_message"].format(
                 (
                     utils.get_platform_emoji()
                     if self._client.heroku_me.premium and self.config["show_heroku"]
                     else ""
                 ),
-                "<emoji document_id=5373141891321699086>😎</emoji>",
-                "<emoji document_id=5469741319330996757>💫</emoji>",
-                "<emoji document_id=5449918202718985124>🌳</emoji>",
-                "<emoji document_id=5472111548572900003>⌨️</emoji>",
-                "<emoji document_id=5451646226975955576>⌛️</emoji>",
-                "<emoji document_id=5431449001532594346>⚡️</emoji>",
-                "<emoji document_id=5359785904535774578>💼</emoji>",
-                platform,
+                me = me,
+                version = version,
+                prefix = prefix,
+                uptime = uptime, 
+                branch = branch,
+                cpu_usage = cpu_usage,
+                ram_usage = ram_usage,
+                ping = ping, 
+                upd = upd,
+                platform = platform,
+                os = os,
+                python_ver = python_ver
             )
         )
     

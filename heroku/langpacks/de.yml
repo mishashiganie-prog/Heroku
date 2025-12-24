@@ -449,14 +449,7 @@ help:
   _cmd_doc_support: "Zeigt den Link zum Heroku Hilfe-Chat"
 
 heroku_info:
-  owner: "Besitzer"
-  version: "Version"
-  build: "Build"
-  prefix: "Präfix"
-  uptime: "Betriebszeit"
-  branch: "Branch"
-  cpu_usage: "CPU-Nutzung"
-  ram_usage: "RAM-Nutzung"
+  info_message: "{}\n<blockquote>┌\n├  【<emoji document_id=5883964170268840032>👤</emoji>】 <b>𝙾𝚠𝚗𝚎𝚛</b>: {me}\n├  【<emoji document_id=5931415565955503486>🤖</emoji>】 <b>𝚅𝚎𝚛𝚜𝚒𝚘𝚗</b>: {version}\n└</blockquote>\n<blockquote>┌\n├  【<emoji document_id=5778335621491723621>📷</emoji>】 <b>𝙿𝚛𝚎𝚏𝚒𝚡</b>: {prefix}⠀ ⠀ \n├  【<emoji document_id=5843799474362652262>🔄</emoji>】 <b>𝚄𝚙𝚝𝚒𝚖𝚎</b>: {uptime}\n├  【<emoji document_id=5879770735999717115>👤</emoji>】 <b>𝙱𝚛𝚊𝚗𝚌𝚑</b>: {branch}\n└</blockquote>\n<blockquote>┌\n├  【<emoji document_id=5775887550262546277>❗️</emoji>】 <b>𝙲𝙿𝚄</b>: {cpu_usage}\n├  【<emoji document_id=5931409969613116639>🛡</emoji>】 <b>𝚁𝙰𝙼</b>: {ram_usage}\n├  【<emoji document_id=5931472654660800739>📊</emoji>】 <b>𝙿𝚒𝚗𝚐</b>: {ping}\n└</blockquote>\n<blockquote>┌\n├  【<emoji document_id=5926783847453692661>🛡</emoji>】 <b>𝚄𝚙𝚍𝚊𝚝𝚎</b>: {upd}\n├  【<emoji document_id=5931415565955503486>🤖</emoji>】 <b>𝙷𝚘𝚜𝚝</b>: {platform}\n├  【<emoji document_id=5819078828017849357>🤖</emoji>】 <b>𝙾𝚂</b>: {os}\n├  【<emoji document_id=5819078828017849357>🤖</emoji>】 <b>𝙿𝚢𝚝𝚑𝚘𝚗 𝚅𝚎𝚛𝚜𝚒𝚘𝚗</b>: {python_ver}\n└</blockquote>"
   non_detectable: "<emoji document_id=5210952531676504517>❌</emoji> <b>Diese Komponente kann auf Ihrem Server nicht erkannt werden!</b>"
   ping_emoji: "Emoji zur Verwendung von Ping"
   send_info: "Sende Informationen zum Userbot"
