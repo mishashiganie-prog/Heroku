@@ -92,7 +92,7 @@ class TokenObtainment(InlineUnit):
                 url="https://webappinternal.telegram.org/botfather?")
             )
         ).url
-        session, _hash = self._get_webapp_session(url)
+        session, _hash = await self._get_webapp_session(url)
         
         main_url = url.split("?")[0]
         try:
