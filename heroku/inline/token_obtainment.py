@@ -97,7 +97,7 @@ class TokenObtainment(InlineUnit):
         if not result or isinstance(result, bool):
             return("WebApp is not available now")
 
-        session, _hash = await self._get_webapp_session
+        session, _hash = result
         
         main_url = url.split("?")[0]
         try:
