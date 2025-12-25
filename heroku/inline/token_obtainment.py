@@ -296,12 +296,13 @@ class TokenObtainment(InlineUnit):
 
                 async with session.post(
                     url + f"/api?hash={_hash}",
-                    data={method: value, "bid": bot_id, "method": "changeSetting"},
+                    data={method: value, "bid": bot_id, "method": "changeSettings"},
                     headers=headers
-                ):
+                ) as resp:
                     if resp.status != 200:
                         logger.error("Error while changing bot inline settings: resp%s", resp.status)
                         return False
+                    logger.info(await resp.text())
 
             return True
 
