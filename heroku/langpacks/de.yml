@@ -35,7 +35,7 @@ heroku_security:
   confirm_rule: "🔐 <b>Bitte bestätigen Sie, dass Sie {} <a href='{}'>{}</a> das Recht geben möchten, {}</b> <code>{}</code> <b>{}</b> zu verwenden"
   multiple_rules: "🔐 <b>Es war nicht möglich, die Sicherheitsregeln eindeutig zu erkennen. Wählen Sie diejenige aus, die Sie meinen:</b>\n\n{}"
   rule_added: "🔐 <b>Sie haben {} <a href='{}'>{}</a> das Recht gegeben, {}</b> <code>{}</code> <b>{}</b> zu verwenden"
-  rules: "<emoji document_id=5472308992514464048>🔐</emoji> <b>Zielgerichtete Sicherheitsregeln:</b>\n\n{}"
+  rules: "<emoji document_id=5472308992514464048>🔐</emoji> <b>Zielgerichtete Sicherheitsregeln:</b>\n\n<blockquote expandable>{}</blockquote>"
   no_rules: "<emoji document_id=5210952531676504517>🚫</emoji> <b>Keine zielgerichteten Sicherheitsregeln</b>"
   owner_target: "<emoji document_id=5447644880824181073>⚠️</emoji> <b>Dieser Benutzer ist ein Besitzer, seine Rechte können nicht durch zielgerichtete Sicherheit verwaltet werden</b>"
   rules_removed: '<emoji document_id=5472308992514464048>🔐</emoji> <b>Zielgerichtete Sicherheitsregeln für <a href="{}">{}</a> wurden entfernt</b>'

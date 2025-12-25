@@ -39,7 +39,7 @@ heroku_security:
   confirm_btn: "👑 Confirm"
   cancel_btn: "🚫 Cancel"
   multiple_rules: "🔐 <b>Unable to unambiguously determine the security rule. Please, choose the one you meant:</b>\n\n{}"
-  rules: "<emoji document_id=5472308992514464048>🔐</emoji> <b>Targeted security rules:</b>\n\n{}"
+  rules: "<emoji document_id=5472308992514464048>🔐</emoji> <b>Targeted security rules:</b>\n\n<blockquote expandable>{}</blockquote>"
   no_rules: "<emoji document_id=5210952531676504517>🚫</emoji> <b>No targeted security rules</b>"
   owner_target: "<emoji document_id=5447644880824181073>⚠️</emoji> <b>This user is owner and can't be promoted by targeted security</b>"
   rules_removed: '<emoji document_id=5472308992514464048>🔐</emoji> <b>Targeted security rules for <a href="{}">{}</a> removed</b>'
