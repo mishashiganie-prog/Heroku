@@ -242,7 +242,7 @@ class TokenObtainment(InlineUnit):
         ids = None
         bot_id = None
             
-        username = self._db.get("heroku.inline", "custom_bot", False)
+        username = self._db.get("heroku.inline", "custom_bot", False).strip("@")
         if username:
             ids = re.search(BOT_ID_PATTERN.format(username), content)
             
