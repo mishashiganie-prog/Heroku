@@ -18,117 +18,19 @@ import os
 import random
 import typing
 
-from urllib.parse import unquote
-
-from herokutl.errors.rpcerrorlist import YouBlockedUserError
-from herokutl.tl.functions.contacts import UnblockRequest
-from herokutl.tl.functions.messages import RequestWebViewRequest
-
 from .. import utils
 from .. import main
 from .._internal import fw_protect
 from .types import InlineUnit
+from . import utils as inutils
 
 if typing.TYPE_CHECKING:
     from ..inline.core import InlineManager
 
 logger = logging.getLogger(__name__)
 
-headers = {
-  "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
-  "accept": "application/json, text/javascript, */*; q=0.01",
-  "referer": "https://webappinternal.telegram.org/botfather",
-  "cookie": "stel_ln=ru",
-}
-HASH_PATTERN = re.compile(r"Main\.init\('([0-9a-f]{18})'\);")
-BOT_ID_PATTERN = (
-    r"<a class=\"tm-row tm-row-link\" href=\"/botfather/bot/(\d+)\">"
-    r"<img class=\"tm-row-pic tm-row-pic-user\" src=\"https:\/\/cdn4\.telesco\.pe\/file\/[A-Za-z0-9_-]+\.jpg\">"
-    r"<div> <div class=\"tm-row-value\">((?:(?!<\/div>).)*)<\/div>"
-    r"<div class=\"tm-row-description\">@{}</div> </div></a>"
-)
-BOT_BASE_PATTERN = re.compile(BOT_ID_PATTERN.format(r"\w*_[0-9a-zA-Z]{6}_bot"))
-
 
 class TokenObtainment(InlineUnit):
-    async def _get_webapp_session(self: "InlineManager", url: str) :
-        session = aiohttp.ClientSession()
-        params = unquote(url.split('tgWebAppData=')[1].split('&tgWebAppVersion')[0])
-        base_url = url.split("?")[0]
-
-        async with session.post(base_url + f"/api?hash=-", headers=headers, data={"_auth": params, "method": "auth"}) as resp:
-            if resp.status != 200:
-                logger.error("Error while getting Cookies to enter botfather webapp: resp%s", resp.status)
-                await session.close()
-                raise RuntimeError("Getting Cookies failed")
-        
-        async with session.get(base_url, headers=headers) as resp:
-            if resp.status != 200:
-                logger.error("Error while getting hash: resp%s", resp.status)
-                await session.close()
-                return False
-            text = await resp.text()
-            _hash = re.search(HASH_PATTERN, text)
-            if _hash:
-                _hash = _hash.group(1)
-            else:
-                logger.error("Unexpected error while getting token")
-                await session.close()
-                return False
-
-        return (session, _hash)
-        
-
-    async def _main_token_manager(
-        self: "InlineManager",
-        action: int,
-        revoke_token: bool = False,
-        create_new_if_needed: bool = True,
-        already_initialised: bool = True
-    ) -> bool | None:
-        url: str = (
-            await self._client(RequestWebViewRequest(
-                peer="@botfather",
-                bot="@botfather",
-                platform="android",
-                from_bot_menu=False,
-                url="https://webappinternal.telegram.org/botfather?")
-            )
-        ).url
-        result = await self._get_webapp_session(url)
-        
-        if not result or isinstance(result, bool):
-            logger.error("WebApp is not available now")
-            return False
-
-        session, _hash = result
-        
-        main_url = url.split("?")[0]
-        try:
-            if action == 1:
-                return await self._assert_token(
-                    session,
-                    main_url,
-                    _hash,
-                    create_new_if_needed=create_new_if_needed,
-                    revoke_token=revoke_token
-                )
-            elif action == 2:
-                return await self._create_bot(session, main_url, _hash)
-            elif action == 3:
-                return await self._dp_revoke_token(
-                    session,
-                    main_url,
-                    _hash,
-                    already_initialised=already_initialised
-                )
-            elif action == 4:
-                return await self._reassert_token(session, main_url, _hash)
-        finally:
-            await session.close()
-
-
     async def _create_bot(
         self: "InlineManager",
         session: aiohttp.ClientSession,
@@ -157,7 +59,7 @@ class TokenObtainment(InlineUnit):
             data = {"username": username, "method": "checkBotUsername"}
             await fw_protect()
 
-            async with session.post(url + f"/api?hash={_hash}", data=data, headers=headers) as resp:
+            async with session.post(url + f"/api?hash={_hash}", data=data, headers=inutils.headers) as resp:
                 if resp.status != 200:
                     logger.error("Error while username check: resp%s", resp.status)
                     return False
@@ -191,7 +93,7 @@ class TokenObtainment(InlineUnit):
                 "target",
                 "bot_userpic"
             )
-            async with session.post(url + f"/api?hash={_hash}", data=form, headers=headers) as resp:
+            async with session.post(url + f"/api?hash={_hash}", data=form, headers=inutils.headers) as resp:
                 if resp.status != 200:
                     logger.error("Error while uploading bot userpic: resp%s", resp.status)
                     raise RuntimeError("Upload failed")
@@ -208,7 +110,7 @@ class TokenObtainment(InlineUnit):
             "method": "createBot"
         }
         await fw_protect()
-        async with session.post(url + f"/api?hash={_hash}", data=data, headers=headers) as resp:
+        async with session.post(url + f"/api?hash={_hash}", data=data, headers=inutils.headers) as resp:
             if resp.status != 200:
                 logger.error("Error while creating the bot: resp%s", resp.status)
                 return False
@@ -236,7 +138,7 @@ class TokenObtainment(InlineUnit):
 
         logger.info("Bot token not found in db, attempting search in BotFather")
 
-        async with session.get(url, headers=headers) as resp:
+        async with session.get(url, headers=inutils.headers) as resp:
             if resp.status != 200:
                 logger.error("Error while getting bot list: resp%s", resp.status)
                 return False
@@ -247,10 +149,10 @@ class TokenObtainment(InlineUnit):
             
         username = self._db.get("heroku.inline", "custom_bot", False).strip("@")
         if username:
-            ids = re.search(BOT_ID_PATTERN.format(username), content)
+            ids = re.search(inutils.BOT_ID_PATTERN.format(username), content)
             
         else:
-            ids = re.search(BOT_BASE_PATTERN, content)
+            ids = re.search(inutils.BOT_BASE_PATTERN, content)
             
         if ids:
             bot_id = ids.group(1)
@@ -260,7 +162,7 @@ class TokenObtainment(InlineUnit):
                 async with session.post(
                     url + f"/api?hash={_hash}",
                     data={"bid": bot_id, "method": "revokeAccessToken"},
-                    headers=headers
+                    headers=inutils.headers
                 ) as resp:
                     if resp.status != 200:
                         logger.error("Error while revoking token: resp%s", resp.status)
@@ -268,7 +170,7 @@ class TokenObtainment(InlineUnit):
 
                     token = (await resp.json())["token"]
             else:
-                hdrs = headers.copy()
+                hdrs = inutils.headers.copy()
                 hdrs.update(
                     {
                         "x-aj-referer": "https://webappinternal.telegram.org/botfather",
@@ -297,7 +199,7 @@ class TokenObtainment(InlineUnit):
                 async with session.post(
                     url + f"/api?hash={_hash}",
                     data={method: value, "bid": bot_id, "method": "changeSettings"},
-                    headers=headers
+                    headers=inutils.headers
                 ) as resp:
                     if resp.status != 200:
                         logger.error("Error while changing bot inline settings: resp%s", resp.status)
@@ -336,6 +238,33 @@ class TokenObtainment(InlineUnit):
             asyncio.ensure_future(self.reassert_token())
         else:
             return await self._reassert_token(session, url, _hash)
+    
+    async def _check_bot(
+        self: "InlineManager",
+        session: aiohttp.ClientSession,
+        url: str,
+        _hash: str,
+        username: str
+    ):
+        async with session.get(url, headers=inutils.headers) as resp:
+            if resp.status != 200:
+                logger.error("Error while getting bot list: resp%s", resp.status)
+                return False
+            content = await resp.text()
+        result = re.search(inutils.BOT_ID_PATTERN.format(username), content)
+
+        if not result:
+            data = {"username": username, "method": "checkBotUsername"}
+            await fw_protect()
+
+            async with session.post(url + f"/api?hash={_hash}", data=data, headers=inutils.headers) as resp:
+                if resp.status != 200:
+                    logger.error("Error while username check: resp%s", resp.status)
+                    return False
+
+                content = await resp.json()
+            result = content.get("ok", False)
+        return result
         
     async def assert_token(
         self: "InlineManager",
@@ -356,3 +285,6 @@ class TokenObtainment(InlineUnit):
 
     async def reassert_token(self: "InlineManager"):
         return await self._main_token_manager(4)
+    
+    async def check_bot(self: "InlineManager", username: str):
+        return await self._main_token_manager(5, username=username)
