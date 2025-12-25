@@ -813,7 +813,7 @@ class Utils(InlineUnit):
             if resp.status != 200:
                 logger.error("Error while getting hash: resp%s", resp.status)
                 await session.close()
-                return False
+                raise RuntimeError("Getting hash failed")
             text = await resp.text()
             _hash = re.search(HASH_PATTERN, text)
             if _hash:
@@ -821,7 +821,7 @@ class Utils(InlineUnit):
             else:
                 logger.error("Unexpected error while getting token")
                 await session.close()
-                return False
+                raise RuntimeError("No hash provided")
 
         return (session, _hash)
 
@@ -842,9 +842,14 @@ class Utils(InlineUnit):
                 url="https://webappinternal.telegram.org/botfather?")
             )
         ).url
-        result = await self._get_webapp_session(url)
-
-        if not result or isinstance(result, bool):
+        for _ in range(5):
+            await asyncio.sleep(1.5)
+            try:
+                result = await self._get_webapp_session(url)
+            except:
+                continue
+            break
+        else:
             logger.error("WebApp is not available now")
             return False
 
