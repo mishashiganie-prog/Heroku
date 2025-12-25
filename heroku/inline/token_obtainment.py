@@ -173,13 +173,12 @@ class TokenObtainment(InlineUnit):
             return False
         
         try:
-            photo_b = open(f"{os.getcwd()}/assets/heroku.png", "rb").read()
             form = aiohttp.FormData()
             form.add_field(
-                "photo",
-                photo_b,
-                content_type="image/jpeg",
-                filename="photo.png"
+                "file",
+                open(f"{os.getcwd()}/assets/heroku.png", "rb"),
+                filename="heroku.png",
+                content_type="image/png"
             )
             form.add_field(
                 "method",
