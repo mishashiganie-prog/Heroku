@@ -119,7 +119,9 @@ class UpdaterMod(loader.Module):
                 )
                 if r.status == 200:
                     announcement = await r.text()
-                    await self.inline.bot.send_message(chat_id=self.tg_id, text=announcement)
+                    if self.get("announcement") != announcement:
+                        await self.inline.bot.send_message(chat_id=self.tg_id, text=announcement)
+                        self.set("announcement", announcement)
             except Exception:
                 pass 
             
