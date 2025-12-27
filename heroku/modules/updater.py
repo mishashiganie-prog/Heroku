@@ -122,8 +122,8 @@ class UpdaterMod(loader.Module):
                     if announcement and announcement != previous:
                         await self.inline.bot.send_message(self.tg_id, announcement)
                         self.db.set("Updater", "announcement", announcement)
-        except Exception:
-            logger.exception("Announcement poller failed")
+            except Exception:
+                logger.exception("Announcement poller failed")
             
 
     @loader.loop(interval=60, autostart=True)
