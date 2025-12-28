@@ -120,7 +120,7 @@ class UpdaterMod(loader.Module):
                     announcement = (await r.text()).strip()
                     previous = self.db.get("Updater", "announcement", "")
                     if announcement and announcement != previous:
-                        await self.inline.bot.send_message(self.tg_id, announcement)
+                        await self.inline.bot.send_message(self.tg_id, f"{self.strings('announcement')}\n{announcement}")
                         self.db.set("Updater", "announcement", announcement)
             except Exception:
                 logger.exception("Announcement poller failed")
