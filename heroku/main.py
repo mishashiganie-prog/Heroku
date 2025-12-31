@@ -916,7 +916,7 @@ class Heroku:
                     )
                 ),
             )
-
+хуй
             logging.debug(
                 "· Started for %s · Prefix: «%s» ·",
                 client.tg_id,
