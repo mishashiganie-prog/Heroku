@@ -45,9 +45,10 @@ class Translations(loader.Module):
             "🇰🇿": "<emoji document_id=6323135275048371614>🇰🇿</emoji>",
             "🥟": "<emoji document_id=5382337996123020810>🥟</emoji>",
             "🇯🇵": "<emoji document_id=5456261908069885892>🇯🇵</emoji>",
+            "🇫🇷": "<emoji document_id=5202132623060640759>🇫🇷</emoji>",
         }
 
-        lang2country = {"en": "🇬🇧", "tt": "🥟", "kk": "🇰🇿", "ua": "🇺🇦", "de": "🇩🇪", "jp": "🇯🇵"}
+        lang2country = {"en": "🇬🇧", "tt": "🥟", "kk": "🇰🇿", "ua": "🇺🇦", "de": "🇩🇪", "jp": "🇯🇵", "fr": "🇫🇷"}
 
         lang = lang2country.get(lang) or utils.get_lang_flag(lang)
         return emoji_flags.get(lang, lang)
