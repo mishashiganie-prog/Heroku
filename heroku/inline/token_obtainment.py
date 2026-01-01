@@ -152,7 +152,7 @@ class TokenObtainment(InlineUnit):
             ids = re.search(inutils.BOT_ID_PATTERN.format(username), content)
             
         else:
-            ids = re.search(inutils.BOT_BASE_PATTERN, content)
+            ids = inutils.BOT_BASE_PATTERN.search(content)
             
         if ids:
             bot_id = ids.group(1)
