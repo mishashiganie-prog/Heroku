@@ -643,8 +643,8 @@ class Heroku:
             return False
 
         session, _hash = result
-
         main_url = url.split("?")[0]
+
         if await TokenObtainment._check_bot(None, session, main_url, _hash, username):
             return True
 
