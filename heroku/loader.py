@@ -140,6 +140,13 @@ VALID_PIP_PACKAGES = re.compile(
     re.MULTILINE,
 )
 
+VALID_APT_PACKAGES = re.compile(
+    r"^\s*# ?packages:(?: ?)((?:{url} )*(?:{url}))\s*$".format(
+        url=r"[-[\]_.~:/?#@!$&'()*+,;%<=>a-zA-Z0-9]+"
+    ),
+    re.MULTILINE,
+)
+
 USER_INSTALL = "PIP_TARGET" not in os.environ and "VIRTUAL_ENV" not in os.environ
 
 native_import = builtins.__import__

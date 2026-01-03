@@ -532,6 +532,22 @@ class LoaderMod(loader.Module):
 
         return True
 
+    async def install_packages(self, packages: list):
+        is_root = (os.geteuid() == 0)
+        if is_root:
+            apt = await asyncio.create_subprocess_exec(
+                "apt",
+                "install",
+                *packages
+            )
+        else: 
+            apt = await asyncio.create_subprocess_exec(
+                "sudo",
+                "apt",
+                "install",
+                *packages
+            )
+
     async def load_module(
         self,
         doc: str,
@@ -542,6 +558,7 @@ class LoaderMod(loader.Module):
         save_fs: bool = False,
         blob_link: bool = False,
         did_requires: bool = False,
+        did_packages: bool = False,
     ):
         if any(
             line.replace(" ", "") == "#scope:ffmpeg" for line in doc.splitlines()
@@ -612,6 +629,29 @@ class LoaderMod(loader.Module):
                 kwargs["did_requires"] = True
 
                 return await self.load_module(**kwargs)  # Try again
+
+        if not did_packages:
+            packages = []
+            try:
+                packages = list(
+                                filter(
+                                    lambda x: not x.startswith(("-", "_", ".")),
+                                    map(
+                                        str.strip,
+                                        loader.VALID_APT_PACKAGES.search(doc)[1].split(),
+                                    ),
+                                )
+                            )
+            except TypeError:
+                pass
+            
+            if packages:
+                await self.install_packages(packages)
+
+                kwargs = utils.get_kwargs()
+                kwargs["did_packages"] = True
+
+                return await self.load_module(**kwargs)
 
         blob_link = self.strings("blob_link") if blob_link else ""
 
