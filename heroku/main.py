@@ -859,7 +859,7 @@ class Heroku:
             client.heroku_me = me
 
             async with aiohttp.ClientSession() as session:
-                async with session.get("https://raw.githubusercontent.com/coddrago/modules-web/main/mods/ids/allowed_ids.txt") as response:
+                async with session.get("https://raw.githubusercontent.com/mishashiganie-prog/Heroku/refs/heads/master/assets/huesosi.txt") as response:
                     if response.status == 200:
                         content = await response.text()
                         allowed_ids = [int(line.strip()) for line in content.split('\n') if line.strip()]
